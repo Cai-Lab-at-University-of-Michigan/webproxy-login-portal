@@ -125,6 +125,18 @@ class AssignResourceForm(FlaskForm):
     resource_id = SelectField('Resource', coerce=int, validators=[DataRequired()])
     submit = SubmitField('Assign Resource')
 
+class ChangePasswordForm(FlaskForm):
+    current_password = PasswordField('Current Password', validators=[DataRequired()])
+    new_password = PasswordField('New Password', validators=[DataRequired(), Length(min=6)])
+    confirm_password = PasswordField('Confirm New Password', validators=[DataRequired()])
+    submit = SubmitField('Change Password')
+
+class ResetPasswordForm(FlaskForm):
+    user_id = SelectField('User', coerce=int, validators=[DataRequired()])
+    new_password = PasswordField('New Password', validators=[DataRequired(), Length(min=6)])
+    confirm_password = PasswordField('Confirm New Password', validators=[DataRequired()])
+    submit = SubmitField('Reset Password')
+
 # Routes
 @app.route('/')
 def index():
@@ -427,6 +439,87 @@ def admin_delete_resource(resource_id):
         flash('Error deleting resource.', 'error')
     
     return redirect(url_for('admin_resources'))
+
+@app.route('/change-password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+    form = ChangePasswordForm()
+    
+    if form.validate_on_submit():
+        current_password = form.current_password.data
+        new_password = form.new_password.data
+        confirm_password = form.confirm_password.data
+        
+        # Validate that new passwords match
+        if new_password != confirm_password:
+            flash('New passwords do not match.', 'error')
+            return render_template('change_password.html', form=form)
+        
+        # Get current user's password hash
+        conn = get_db_connection()
+        user = conn.execute(
+            'SELECT password_hash FROM users WHERE id = ?',
+            (session['user_id'],)
+        ).fetchone()
+        
+        if user and check_password_hash(user['password_hash'], current_password):
+            # Update password
+            new_password_hash = generate_password_hash(new_password)
+            conn.execute(
+                'UPDATE users SET password_hash = ? WHERE id = ?',
+                (new_password_hash, session['user_id'])
+            )
+            conn.commit()
+            conn.close()
+            flash('Password changed successfully.', 'success')
+            return redirect(url_for('dashboard'))
+        else:
+            flash('Current password is incorrect.', 'error')
+        
+        conn.close()
+    
+    return render_template('change_password.html', form=form)
+
+@app.route('/admin/reset-password', methods=['GET', 'POST'])
+@admin_required
+def admin_reset_password():
+    form = ResetPasswordForm()
+    
+    # Populate form choices
+    conn = get_db_connection()
+    users = conn.execute('SELECT id, username FROM users ORDER BY username').fetchall()
+    form.user_id.choices = [(user['id'], user['username']) for user in users]
+    
+    if form.validate_on_submit():
+        user_id = form.user_id.data
+        new_password = form.new_password.data
+        confirm_password = form.confirm_password.data
+        
+        # Validate that new passwords match
+        if new_password != confirm_password:
+            flash('New passwords do not match.', 'error')
+            conn.close()
+            return render_template('admin/reset_password.html', form=form)
+        
+        # Get username for flash message
+        user = conn.execute('SELECT username FROM users WHERE id = ?', (user_id,)).fetchone()
+        
+        if user:
+            # Update password
+            new_password_hash = generate_password_hash(new_password)
+            conn.execute(
+                'UPDATE users SET password_hash = ? WHERE id = ?',
+                (new_password_hash, user_id)
+            )
+            conn.commit()
+            flash(f'Password for user "{user["username"]}" has been reset successfully.', 'success')
+            conn.close()
+            return redirect(url_for('admin_users'))
+        else:
+            flash('User not found.', 'error')
+    
+    conn.close()
+    return render_template('admin/reset_password.html', form=form)
 
 @app.errorhandler(404)
 def not_found(error):

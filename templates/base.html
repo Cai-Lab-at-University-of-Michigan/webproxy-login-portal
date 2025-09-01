@@ -25,6 +25,9 @@
                         <li><a class="dropdown-item" href="{{ url_for('dashboard') }}">
                             <i class="fas fa-tachometer-alt"></i> Dashboard
                         </a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('change_password') }}">
+                            <i class="fas fa-key"></i> Change Password
+                        </a></li>
                         {% if session.is_admin %}
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="{{ url_for('admin_dashboard') }}">
