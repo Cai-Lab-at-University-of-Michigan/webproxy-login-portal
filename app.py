@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify, send_file
 from flask_wtf import FlaskForm, CSRFProtect
 from flask_wtf.csrf import validate_csrf
 from wtforms import StringField, PasswordField, TextAreaField, SubmitField, SelectField, URLField
@@ -533,6 +533,7 @@ def forbidden(error):
 def internal_error(error):
     return render_template('errors/500.html'), 500
 
-#if __name__ == '__main__':
-#    init_db()
-#    app.run(debug=True, host='0.0.0.0', port=8080)
+@app.route('/novnc/<path:path>')
+@login_required
+def app_route(path):
+    return send_file(os.path.join(app.root_path, 'templates', 'novnc', path))
