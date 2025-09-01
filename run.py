@@ -31,10 +31,8 @@ def main():
     
     print("Starting Webproxy Login Portal...")
     print("Default admin login: username='admin', password='admin123'")
-    print("Server will be available at: http://localhost:5000")
-    print("Press Ctrl+C to stop the server")
     
-    app.run(debug=True, host='0.0.0.0', port=8080)
+    app.run(debug=False, host='0.0.0.0', port=8080)
 
 if __name__ == '__main__':
     main()
