@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Assign Resources - Admin Panel{% endblock %}
+
+{% block content %}
+<div class="row mt-4">
+    <div class="col-md-3">
+        <div class="sidebar p-3">
+            <h5><i class="fas fa-cog"></i> Admin Panel</h5>
+            <nav class="nav nav-pills flex-column">
+                <a class="nav-link" href="{{ url_for('admin_dashboard') }}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a class="nav-link" href="{{ url_for('admin_users') }}">
+                    <i class="fas fa-users"></i> Users
+                </a>
+                <a class="nav-link" href="{{ url_for('admin_resources') }}">
+                    <i class="fas fa-link"></i> Resources
+                </a>
+                <a class="nav-link active" href="{{ url_for('admin_assign_resource') }}">
+                    <i class="fas fa-user-plus"></i> Assign Resources
+                </a>
+                <a class="nav-link" href="{{ url_for('admin_assignments') }}">
+                    <i class="fas fa-list"></i> View Assignments
+                </a>
+            </nav>
+        </div>
+    </div>
+    
+    <div class="col-md-9">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2><i class="fas fa-user-plus"></i> Assign Resource to User</h2>
+            <a href="{{ url_for('admin_assignments') }}" class="btn btn-secondary">
+                <i class="fas fa-list"></i> View All Assignments
+            </a>
+        </div>
+        
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Resource Assignment</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST">
+                            {{ form.hidden_tag() }}
+                            
+                            <div class="mb-3">
+                                {{ form.user_id.label(class="form-label") }}
+                                {{ form.user_id(class="form-select") }}
+                                {% if form.user_id.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.user_id.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text">Select the user to assign the resource to.</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                {{ form.resource_id.label(class="form-label") }}
+                                {{ form.resource_id(class="form-select") }}
+                                {% if form.resource_id.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.resource_id.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text">Select the resource to assign.</div>
+                            </div>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">Cancel</a>
+                                {{ form.submit(class="btn btn-primary") }}
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h6><i class="fas fa-info-circle"></i> Assignment Tips</h6>
+                    </div>
+                    <div class="card-body">
+                        <ul class="mb-0">
+                            <li>Users will see assigned resources on their dashboard</li>
+                            <li>Resources are grouped by category on the user dashboard</li>
+                            <li>You can view all assignments on the assignments page</li>
+                            <li>Each user-resource combination can only be assigned once</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

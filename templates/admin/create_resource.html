@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}Add Resource - Admin Panel{% endblock %}
+
+{% block content %}
+<div class="row mt-4">
+    <div class="col-md-3">
+        <div class="sidebar p-3">
+            <h5><i class="fas fa-cog"></i> Admin Panel</h5>
+            <nav class="nav nav-pills flex-column">
+                <a class="nav-link" href="{{ url_for('admin_dashboard') }}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a class="nav-link" href="{{ url_for('admin_users') }}">
+                    <i class="fas fa-users"></i> Users
+                </a>
+                <a class="nav-link" href="{{ url_for('admin_resources') }}">
+                    <i class="fas fa-link"></i> Resources
+                </a>
+                <a class="nav-link" href="{{ url_for('admin_assign_resource') }}">
+                    <i class="fas fa-user-plus"></i> Assign Resources
+                </a>
+                <a class="nav-link" href="{{ url_for('admin_assignments') }}">
+                    <i class="fas fa-list"></i> View Assignments
+                </a>
+            </nav>
+        </div>
+    </div>
+    
+    <div class="col-md-9">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2><i class="fas fa-plus"></i> Add New Resource</h2>
+            <a href="{{ url_for('admin_resources') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Resources
+            </a>
+        </div>
+        
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Resource Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST">
+                            {{ form.hidden_tag() }}
+                            
+                            <div class="mb-3">
+                                {{ form.name.label(class="form-label") }}
+                                {{ form.name(class="form-control") }}
+                                {% if form.name.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.name.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text">A friendly name for the resource.</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                {{ form.url.label(class="form-label") }}
+                                {{ form.url(class="form-control", placeholder="https://example.com") }}
+                                {% if form.url.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.url.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text">The full URL to the resource.</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                {{ form.description.label(class="form-label") }}
+                                {{ form.description(class="form-control", rows="3") }}
+                                {% if form.description.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.description.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text">Optional description of what this resource provides.</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                {{ form.category.label(class="form-label") }}
+                                {{ form.category(class="form-control", placeholder="e.g., Documentation, Tools, Reports") }}
+                                {% if form.category.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.category.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text">Optional category to group resources together.</div>
+                            </div>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a href="{{ url_for('admin_resources') }}" class="btn btn-secondary">Cancel</a>
+                                {{ form.submit(class="btn btn-primary") }}
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
