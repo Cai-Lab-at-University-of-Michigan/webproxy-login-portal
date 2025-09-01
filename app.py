@@ -536,4 +536,4 @@ def internal_error(error):
 @app.route('/novnc/<path:path>')
 @login_required
 def novnc_route(path):
-    return send_file(os.path.join(app.root_path, 'templates', 'novnc', path))
+    return send_file(os.path.join(app.root_path, 'static', 'novnc', path))
