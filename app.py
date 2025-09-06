@@ -270,9 +270,6 @@ def dashboard():
 
 @app.route("/vncauth")
 def vnc_auth_endpoint():
-    print(session)
-    print(request)
-    print(request.headers)
     if "user_id" not in session:
         return "Unauthorized", 401
 
