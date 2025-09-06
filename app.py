@@ -206,9 +206,10 @@ def dashboard():
     return render_template('dashboard.html', resources_by_category=resources_by_category)
 
 @app.route('/vncauth')
-@login_required
 def vnc_auth_endpoint():
-    return ""
+    if 'user_id' not in session:
+        return "Unauthorized", 401
+    return "Authorized", 200
 
 @app.route('/admin')
 @admin_required
