@@ -205,6 +205,11 @@ def dashboard():
     
     return render_template('dashboard.html', resources_by_category=resources_by_category)
 
+@app.route('/vncauthtest')
+@login_required
+def vnc_auth_endpoint():
+    return ""
+
 @app.route('/admin')
 @admin_required
 def admin_dashboard():
