@@ -5,14 +5,11 @@
 {% block content %}
 <div class="row mt-4">
     <div class="col-12">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2>Welcome, {{ session.username }}!</h2>
-        </div>
-
         <!-- Upload Form -->
         <div class="mb-4">
             <h3 class="mb-3 text-white"><i class="bi bi-upload"></i> Upload a File</h3>
             <form method="post" enctype="multipart/form-data" class="border rounded p-3 bg-light">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <div class="mb-3">
                     <label for="file" class="form-label text-white">Select File</label>
                     <input type="file" name="file" id="file" class="form-control" required>
