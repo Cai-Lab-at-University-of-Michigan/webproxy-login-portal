@@ -10,23 +10,23 @@
         </div>
 
         <!-- Upload Form -->
-<div class="mb-4">
-    <h3 class="mb-3 text-white"><i class="bi bi-upload"></i> Upload a File</h3>
-    <form method="post" enctype="multipart/form-data" class="border rounded p-3 bg-light">
-        <div class="mb-3">
-            <label for="file" class="form-label text-white">Select File</label>
-            <input type="file" name="file" id="file" class="form-control" required>
+        <div class="mb-4">
+            <h3 class="mb-3 text-white"><i class="bi bi-upload"></i> Upload a File</h3>
+            <form method="post" enctype="multipart/form-data" class="border rounded p-3 bg-light">
+                <div class="mb-3">
+                    <label for="file" class="form-label text-white">Select File</label>
+                    <input type="file" name="file" id="file" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="filename" class="form-label text-white">Custom File Name (optional)</label>
+                    <input type="text" name="filename" id="filename" class="form-control" placeholder="Leave empty to use original name">
+                    <div class="form-text">You can specify a custom name for the uploaded file. Include the file extension if needed.</div>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-cloud-upload"></i> Upload File
+                </button>
+            </form>
         </div>
-        <div class="mb-3">
-            <label for="filename" class="form-label text-white">Custom File Name (optional)</label>
-            <input type="text" name="filename" id="filename" class="form-control" placeholder="Leave empty to use original name">
-            <div class="form-text">You can specify a custom name for the uploaded file. Include the file extension if needed.</div>
-        </div>
-        <button type="submit" class="btn btn-primary">
-            <i class="bi bi-cloud-upload"></i> Upload File
-        </button>
-    </form>
-</div>
     </div>
 </div>
 {% endblock %}
