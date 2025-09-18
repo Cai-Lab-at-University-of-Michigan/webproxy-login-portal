@@ -654,3 +654,8 @@ def internal_error(error):
 @login_required
 def novnc_route(path):
     return send_file(os.path.join(app.root_path, "static", "novnc", path))
+
+@app.route("/upload", methods=["GET", "POST"])
+@admin_required
+def upload_file_portal():
+    return "Upload File Portal - To be implemented"
