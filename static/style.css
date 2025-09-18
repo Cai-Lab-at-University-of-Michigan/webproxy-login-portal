@@ -21,6 +21,25 @@ body {
     color: var(--dark-text);
 }
 
+/* Center content and limit width on wide screens */
+main.container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Responsive adjustments for better centering */
+@media (min-width: 1200px) {
+    main.container {
+        max-width: 1200px;
+    }
+}
+
+@media (min-width: 1400px) {
+    main.container {
+        max-width: 1300px;
+    }
+}
+
 .resource-card {
     transition: all 0.3s ease;
     border: 1px solid var(--dark-border);
