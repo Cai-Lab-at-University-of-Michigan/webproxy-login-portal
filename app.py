@@ -658,4 +658,4 @@ def novnc_route(path):
 @app.route("/upload", methods=["GET", "POST"])
 @login_required
 def upload_file_portal():
-    return "Upload File Portal - To be implemented"
+    return render_template("upload.html")
