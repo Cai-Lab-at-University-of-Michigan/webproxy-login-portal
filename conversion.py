@@ -131,7 +131,7 @@ class FileChangeHandler(FileSystemEventHandler):
                 FFMPEG_BIN,
                 "-y",  # Overwrite output file without asking
                 "-noautorotate",  # Disable auto-rotation
-                "-i", f'"{str(job)}"',  # Input file
+                #"-i", f'"{str(job)}"',  # Input file
                 "-c:v", "libx264",  # Video codec
                 "-pix_fmt", "yuv420p",  # Pixel format
                 "-vf", "\"scale='if(gt(iw,ih),-2,480)':'if(gt(iw,ih),480,-2)'\"",
