@@ -12,9 +12,6 @@ FFMPEG_BIN = (
     "./ffmpeg"  # Path to ffmpeg binary, ensure it's in your PATH or provide full path
 )
 
-folder = sys.argv[1] if len(sys.argv) == 1 else "."
-print("Converting files in folder:", folder)
-
 
 class FileChangeHandler(FileSystemEventHandler):
     """Handles file system events and manages subprocess execution."""
