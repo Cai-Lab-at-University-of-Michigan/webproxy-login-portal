@@ -16,10 +16,6 @@ folder = sys.argv[1] if len(sys.argv) == 1 else "."
 print("Converting files in folder:", folder)
 
 
-def worker_command(path):
-    pass
-
-
 class FileChangeHandler(FileSystemEventHandler):
     """Handles file system events and manages subprocess execution."""
 
@@ -125,7 +121,31 @@ class FileChangeHandler(FileSystemEventHandler):
             # Run the script with the file path as an argument
             # cmd = [sys.executable, self.script_path, file_path]
 
-            cmd = ["echo", "hi"]
+            cmd = ["echo", f'{file_path}']
+
+            #if job.suffix in [".mov", ".mp4", ".avi", ".mkv", ".flv", ".wmv", ".webm"]:
+            # Convert video files to mp4 x264 fps=10 format if they are not already
+
+            #out_fname = job.with_stem(f"{job.stem}_converted").with_suffix(
+            #    ".mp4"
+            #)  # Change extension to .mp4
+
+
+            job_exec = [
+                FFMPEG_BIN,
+                "-y",  # Overwrite output file without asking
+                "-noautorotate",  # Disable auto-rotation
+                "-i", f'"{str(job)}"',  # Input file
+                "-c:v", "libx264",  # Video codec
+                "-pix_fmt", "yuv420p",  # Pixel format
+                "-vf", "\"scale='if(gt(iw,ih),-2,480)':'if(gt(iw,ih),480,-2)'\"",
+                #"-vf", "\"crop=trunc(iw/2)*2:trunc(ih/2)*2\"",
+                "-preset", "fast",  # Encoding preset
+                "-crf", "23",  # Constant Rate Factor for quality
+                "-an",  # Disable audio
+                "-r", "30", # "10",  # Set frame rate to 10 fps
+                #f'"{str(out_fname)}"',  # Output file
+            ]
 
             # Start the subprocess
             process = subprocess.Popen(
