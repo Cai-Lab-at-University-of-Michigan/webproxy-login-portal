@@ -29,9 +29,6 @@ from functools import wraps
 import pathlib
 import threading
 
-FFMPEG_BIN = (
-    "./ffmpeg"  # Path to ffmpeg binary, ensure it's in your PATH or provide full path
-)
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.environ.get(
