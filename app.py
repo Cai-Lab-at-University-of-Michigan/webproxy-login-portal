@@ -688,23 +688,29 @@ def upload_file():
 
             # Validate the final filename
             print("Final filename:", final_filename)
-            if final_filename.name.startswith("."):
+            if (
+                final_filename.name.startswith(".")
+                or "/" in final_filename.name
+                or "\\" in final_filename.name
+                or len(final_filename.name) == 0
+            ):
                 flash("Invalid filename. Please provide a valid name.")
                 return redirect(request.url)
 
-            # filepath = pathlib.Path(app.config["UPLOAD_FOLDER"]) / final_filename
-            filepath = pathlib.Path(app.config["UPLOAD_FOLDER"]) / (
+            filepath = pathlib.Path(app.config["UPLOAD_FOLDER"]) / final_filename
+            filepath_tmp = pathlib.Path(app.config["UPLOAD_FOLDER"]) / (
                 "tmp_" + final_filename.name
             )
 
             # Check if file already exists
-            if filepath.exists():
+            if filepath.exists() or filepath_tmp.exists():
                 flash(
                     f"File '{final_filename}' already exists. Please choose a different name."
                 )
                 return redirect(request.url)
 
-            file.save(filepath)
+            file.save(filepath_tmp)
+            filepath_tmp.replace(filepath)  # remove tmp_ prefix
 
             flash(f"File uploaded successfully as {final_filename}!")
             return redirect(url_for("upload_file"))

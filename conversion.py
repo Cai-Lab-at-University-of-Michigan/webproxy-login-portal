@@ -77,6 +77,7 @@ class FileChangeHandler(FileSystemEventHandler):
             ".lock",  # Lock files
             "__pycache__",  # Python cache
             ".DS_Store",  # macOS system files
+            "tmp_",
         ]
         if (
             any(
