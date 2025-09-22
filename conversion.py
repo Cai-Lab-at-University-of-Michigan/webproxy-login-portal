@@ -77,7 +77,6 @@ class FileChangeHandler(FileSystemEventHandler):
                 file_path.startswith(pattern) or file_path.endswith(pattern)
                 for pattern in skip_patterns
             )
-            or ".zip" not in file_path
         ):
             return
 
