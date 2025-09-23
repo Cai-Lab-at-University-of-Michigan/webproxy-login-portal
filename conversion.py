@@ -123,7 +123,7 @@ class FileChangeHandler(FileSystemEventHandler):
 
             cmd = ["echo", f'{file_path}']
 
-            if job.suffix in [".mov", ".mp4", ".avi", ".mkv", ".flv", ".wmv", ".webm"]:
+            #if job.suffix in [".mov", ".mp4", ".avi", ".mkv", ".flv", ".wmv", ".webm"]:
             # Convert video files to mp4 x264 fps=10 format if they are not already
 
             #out_fname = job.with_stem(f"{job.stem}_converted").with_suffix(
