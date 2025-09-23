@@ -138,7 +138,7 @@ class FileChangeHandler(FileSystemEventHandler):
                 "-y",  # Overwrite output file without asking
                 "-noautorotate",  # Disable auto-rotation
                 "-i",
-                f'"{str(file_path)}"',  # Input file
+                f'{str(file_path)}',  # Input file
                 "-c:v",
                 "libx264",  # Video codec
                 "-pix_fmt",
@@ -153,7 +153,7 @@ class FileChangeHandler(FileSystemEventHandler):
                 "-an",  # Disable audio
                 "-r",
                 "30",  # "10",  # Set frame rate to 10 fps
-                f'"{out_name}"',  # Output file
+                f'{out_name}',  # Output file
             ]
 
             # Start the subprocess
