@@ -132,6 +132,18 @@ class FileChangeHandler(FileSystemEventHandler):
                 return
 
             out_name = file_path + "_converted.mp4"
+            out_name_path = Path(out_name)
+
+            if "_converted" in file_path:
+                print(f"Skipping conversion for {file_path}, already converted.")
+                self.cleanup_process(file_path)
+                return
+
+            if out_name_path.exists():
+                print(f"Converted file already exists, skipping: {out_name}")
+                self.cleanup_process(file_path)
+                return
+            
 
             job_exec = [
                 FFMPEG_BIN,
