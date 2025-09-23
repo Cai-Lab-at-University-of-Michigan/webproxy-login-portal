@@ -4,7 +4,8 @@ import time
 import subprocess
 import threading
 from pathlib import Path
-#from watchdog.observers import Observer
+
+# from watchdog.observers import Observer
 from watchdog.observers.polling import PollingObserver
 from watchdog.events import FileSystemEventHandler
 from concurrent.futures import ThreadPoolExecutor
@@ -73,11 +74,9 @@ class FileChangeHandler(FileSystemEventHandler):
             ".DS_Store",  # macOS system files
             "tmp_",
         ]
-        if (
-            any(
-                file_path.startswith(pattern) or file_path.endswith(pattern)
-                for pattern in skip_patterns
-            )
+        if any(
+            file_path.startswith(pattern) or file_path.endswith(pattern)
+            for pattern in skip_patterns
         ):
             return
 
@@ -120,35 +119,47 @@ class FileChangeHandler(FileSystemEventHandler):
             # Run the script with the file path as an argument
             # cmd = [sys.executable, self.script_path, file_path]
 
-            cmd = ["echo", f'{file_path}']
-
-            #if job.suffix in [".mov", ".mp4", ".avi", ".mkv", ".flv", ".wmv", ".webm"]:
+            # if job.suffix in [".mov", ".mp4", ".avi", ".mkv", ".flv", ".wmv", ".webm"]:
             # Convert video files to mp4 x264 fps=10 format if they are not already
 
-            #out_fname = job.with_stem(f"{job.stem}_converted").with_suffix(
+            # out_fname = job.with_stem(f"{job.stem}_converted").with_suffix(
             #    ".mp4"
-            #)  # Change extension to .mp4
+            # )  # Change extension to .mp4
 
+            if not any(file_path.lower().endswith(ext) for ext in [".mov", ".avi", ".mkv", ".flv", ".wmv", ".webm"]):
+                print(f"Skipping conversion for {file_path}, not a supported video format.")
+                self.cleanup_process(file_path)
+                return
+
+            out_name = file_path + "_converted.mp4"
 
             job_exec = [
                 FFMPEG_BIN,
                 "-y",  # Overwrite output file without asking
                 "-noautorotate",  # Disable auto-rotation
-                "-i", f'"{str(job)}"',  # Input file
-                "-c:v", "libx264",  # Video codec
-                "-pix_fmt", "yuv420p",  # Pixel format
-                "-vf", "\"scale='if(gt(iw,ih),-2,480)':'if(gt(iw,ih),480,-2)'\"",
-                #"-vf", "\"crop=trunc(iw/2)*2:trunc(ih/2)*2\"",
-                "-preset", "fast",  # Encoding preset
-                "-crf", "23",  # Constant Rate Factor for quality
+                "-i",
+                f'"{str(file_path)}"',  # Input file
+                "-c:v",
+                "libx264",  # Video codec
+                "-pix_fmt",
+                "yuv420p",  # Pixel format
+                "-vf",
+                "\"scale='if(gt(iw,ih),-2,480)':'if(gt(iw,ih),480,-2)'\"",
+                # "-vf", "\"crop=trunc(iw/2)*2:trunc(ih/2)*2\"",
+                "-preset",
+                "fast",  # Encoding preset
+                "-crf",
+                "23",  # Constant Rate Factor for quality
                 "-an",  # Disable audio
-                "-r", "30", # "10",  # Set frame rate to 10 fps
-                #f'"{str(out_fname)}"',  # Output file
+                "-r",
+                "30",  # "10",  # Set frame rate to 10 fps
+                f'"{out_name}"',  # Output file
             ]
 
             # Start the subprocess
             process = subprocess.Popen(
-                cmd,
+                #cmd,
+                job_exec,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,  # subprocess.PIPE,
                 text=True,
