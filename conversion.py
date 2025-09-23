@@ -126,7 +126,7 @@ class FileChangeHandler(FileSystemEventHandler):
             #    ".mp4"
             # )  # Change extension to .mp4
 
-            if not any(file_path.lower().endswith(ext) for ext in [".mov", ".avi", ".mkv", ".flv", ".wmv", ".webm"]):
+            if not any(file_path.lower().endswith(ext) for ext in [".mov", ".avi", ".mkv", ".flv", ".wmv", ".webm", ".mp4"]):
                 print(f"Skipping conversion for {file_path}, not a supported video format.")
                 self.cleanup_process(file_path)
                 return
