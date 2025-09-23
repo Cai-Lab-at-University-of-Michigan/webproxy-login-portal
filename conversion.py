@@ -18,7 +18,7 @@ FFMPEG_BIN = (
 class FileChangeHandler(FileSystemEventHandler):
     """Handles file system events and manages subprocess execution."""
 
-    def __init__(self, max_workers=4):
+    def __init__(self, max_workers=1):
         """
         Initialize the file change handler.
 
