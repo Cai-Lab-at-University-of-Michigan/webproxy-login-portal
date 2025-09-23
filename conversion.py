@@ -5,7 +5,7 @@ import subprocess
 import threading
 from pathlib import Path
 from watchdog.observers import Observer
-from watchdog.events.polling import PollingObserver
+from watchdog.observers.polling import PollingObserver
 from watchdog.events import FileSystemEventHandler
 from concurrent.futures import ThreadPoolExecutor
 
