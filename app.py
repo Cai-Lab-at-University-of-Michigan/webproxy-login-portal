@@ -29,9 +29,6 @@ from functools import wraps
 import pathlib
 import threading
 
-FFMPEG_BIN = (
-    "./ffmpeg"  # Path to ffmpeg binary, ensure it's in your PATH or provide full path
-)
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.environ.get(
@@ -664,16 +661,6 @@ def novnc_route(path):
     return send_file(os.path.join(app.root_path, "static", "novnc", path))
 
 
-# @app.route("/upload", methods=["GET", "POST"])
-# @login_required
-# def upload_file_portal():
-#    return render_template("upload.html")
-
-job_queue_lock = threading.Lock()
-job_queue = []
-in_processing_queue = set()
-
-
 @app.route("/upload", methods=["GET", "POST"])
 @login_required
 def upload_file():
@@ -701,43 +688,32 @@ def upload_file():
 
             # Validate the final filename
             print("Final filename:", final_filename)
-            if final_filename.name.startswith("."):
+            if (
+                final_filename.name.startswith(".")
+                or "/" in final_filename.name
+                or "\\" in final_filename.name
+                or len(final_filename.name) == 0
+            ):
                 flash("Invalid filename. Please provide a valid name.")
                 return redirect(request.url)
 
-            # filepath = os.path.join(app.config["UPLOAD_FOLDER"], final_filename)
             filepath = pathlib.Path(app.config["UPLOAD_FOLDER"]) / final_filename
+            filepath_tmp = pathlib.Path(app.config["UPLOAD_FOLDER"]) / (
+                "tmp_" + final_filename.name
+            )
 
             # Check if file already exists
-            if filepath.exists():
+            if filepath.exists() or filepath_tmp.exists():
                 flash(
                     f"File '{final_filename}' already exists. Please choose a different name."
                 )
                 return redirect(request.url)
 
-            file.save(filepath)
-
-            # Add the file to the job queue for processing
-            with job_queue_lock:
-                job_queue.append(filepath)
+            file.save(filepath_tmp)
+            filepath_tmp.replace(filepath)  # remove tmp_ prefix
 
             flash(f"File uploaded successfully as {final_filename}!")
             return redirect(url_for("upload_file"))
-
-    # GET request: render the upload form and list available files
-    files = os.listdir(app.config["UPLOAD_FOLDER"])
-
-    with job_queue_lock:
-        # Remove files that are currently being processed
-        files = [
-            f
-            for f in files
-            if (f not in in_processing_queue) and (not f.startswith("."))
-        ]
-        # Get files currently being processed
-        processing_files = list(in_processing_queue)
-        # Get files waiting in queue (extract just the filenames)
-        queue_files = [os.path.basename(str(job)) for job in job_queue]
 
     return render_template(
         "upload.html",
