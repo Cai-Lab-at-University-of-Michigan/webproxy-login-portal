@@ -90,6 +90,8 @@ class FileChangeHandler(FileSystemEventHandler):
             # print(f"Cancelling existing process for {file_path}")
             # self.running_processes[file_path].cancel()
 
+            print(type(file_path))
+
             # Submit new task to executor
             future = self.executor.submit(self.run_script, file_path, event_type)
             self.running_processes[file_path] = future
@@ -121,7 +123,7 @@ class FileChangeHandler(FileSystemEventHandler):
 
             cmd = ["echo", f'{file_path}']
 
-            #if job.suffix in [".mov", ".mp4", ".avi", ".mkv", ".flv", ".wmv", ".webm"]:
+            if job.suffix in [".mov", ".mp4", ".avi", ".mkv", ".flv", ".wmv", ".webm"]:
             # Convert video files to mp4 x264 fps=10 format if they are not already
 
             #out_fname = job.with_stem(f"{job.stem}_converted").with_suffix(
@@ -133,7 +135,7 @@ class FileChangeHandler(FileSystemEventHandler):
                 FFMPEG_BIN,
                 "-y",  # Overwrite output file without asking
                 "-noautorotate",  # Disable auto-rotation
-                #"-i", f'"{str(job)}"',  # Input file
+                "-i", f'"{str(job)}"',  # Input file
                 "-c:v", "libx264",  # Video codec
                 "-pix_fmt", "yuv420p",  # Pixel format
                 "-vf", "\"scale='if(gt(iw,ih),-2,480)':'if(gt(iw,ih),480,-2)'\"",
