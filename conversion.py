@@ -85,17 +85,10 @@ class FileChangeHandler(FileSystemEventHandler):
             if file_path in self.running_processes:
                 print(f"Skip because already running for {file_path}")
                 return
-            # print(f"Cancelling existing process for {file_path}")
-            # self.running_processes[file_path].cancel()
-
-            print(type(file_path))
 
             # Submit new task to executor
             future = self.executor.submit(self.run_script, file_path, event_type)
             self.running_processes[file_path] = future
-
-            # Add callback to clean up completed processes
-            # future.add_done_callback(lambda f: self.cleanup_process(file_path, f))
 
     def run_script(self, file_path, event_type):
         """
