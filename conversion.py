@@ -5,6 +5,7 @@ import subprocess
 import threading
 from pathlib import Path
 from watchdog.observers import Observer
+from watchdog.events.polling import PollingObserver
 from watchdog.events import FileSystemEventHandler
 from concurrent.futures import ThreadPoolExecutor
 
@@ -231,7 +232,7 @@ def main():
     event_handler = FileChangeHandler(max_workers=1)
 
     # Set up observer
-    observer = Observer()
+    observer = PollingObserver(timeout=1)
     observer.schedule(event_handler, watch_folder, recursive=True)
 
     try:
