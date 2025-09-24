@@ -1,0 +1,8 @@
+username,password,is_admin,resources
+john_doe,secure123,0,"Web Server,Database"
+jane_admin,admin456,1,
+bob_user,password789,0,Development Environment
+alice_smith,mypassword,0,"Web Server,File Storage"
+david_manager,mgr2024!,1,"Web Server,Database,File Storage"
+sarah_user,sarahpass,0,
+mike_dev,devpass123,0,"Development Environment,Database"
