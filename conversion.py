@@ -149,7 +149,7 @@ class FileChangeHandler(FileSystemEventHandler):
                 "-pix_fmt",
                 "yuv420p",  # Pixel format
                 "-vf",
-                "scale='if(gt(iw,ih),-2,480)':'if(gt(iw,ih),480,-2)'",
+                "scale='if(gt(iw,ih),-2,720)':'if(gt(iw,ih),720,-2)'",
                 # "-vf", "\"crop=trunc(iw/2)*2:trunc(ih/2)*2\"",
                 "-preset",
                 "fast",  # Encoding preset
